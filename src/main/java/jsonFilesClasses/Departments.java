@@ -1,7 +1,9 @@
+package jsonFilesClasses;
+
 public class Departments {
     private String name;
 
-//    public Departments(String name, double x, double y, double radius) {
+//    public jsonFiles.Departments(String name, double x, double y, double radius) {
 //        this.name = name;
 //        this.x = x;
 //        this.y = y;

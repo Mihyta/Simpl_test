@@ -1,11 +1,8 @@
+package jsonFilesClasses;
+
 import java.util.Objects;
 
 public class WellParameters {
-//    public WellParameters(int wellId, String parameterName, double value) {
-//        this.wellId = wellId;
-//        this.parameterName = parameterName;
-//        this.value = value;
-//    }
 
     @Override
     public String toString() {

@@ -2,13 +2,16 @@ package jsonReader;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jsonFilesClasses.Departments;
+import jsonFilesClasses.WellParameters;
+import jsonFilesClasses.Wells;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class JSONReader implements JSONReaderInterface{
-
+public class JSONReader implements JSONReaderInterface {
+    //Чтение данных из JSON файлов
     @Override
     public List<Departments> JsonReadDepartments() {
         final ObjectMapper objectMapper = new ObjectMapper();

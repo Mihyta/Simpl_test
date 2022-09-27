@@ -1,3 +1,5 @@
+package logic;
+
 import jsonFilesClasses.Departments;
 import jsonFilesClasses.WellParameters;
 import jsonFilesClasses.Wells;
@@ -9,40 +11,69 @@ import java.util.stream.Collectors;
 
 public class MainAppCode implements MainAppCodeInterface {
     final JSONReaderInterface jsonReaderInterface = new JSONReader();
+    // Задание 1
     @Override
     public void uniqueParameters() {
         List<WellParameters> wellParameters = jsonReaderInterface.JsonReadWellParameters();
         LinkedHashSet<WellParameters> wellParametersLinkedHashSet = new LinkedHashSet<>(wellParameters);
+        int i = 0;
+        StringBuilder builder = new StringBuilder();
+        for (WellParameters s : wellParametersLinkedHashSet) {
+            builder.append(++i).append(". ").append(s).append("\n");
+        }
         System.out.println("---------Task 1----------");
-        wellParametersLinkedHashSet.forEach(System.out::println);
+        System.out.println(builder);
     }
-
+    // Задание 2
     @Override
     public void nameBoreholeAndMinMaxAveParameters(int startWell, int endWell) {
         List<WellParameters> wellParametersList = jsonReaderInterface.JsonReadWellParameters();
         List<Wells> wellsList = jsonReaderInterface.JsonReadWells();
-
-        wellsList= wellsList.stream().filter(x -> x.getId() >= startWell && x.getId() <= endWell).collect(Collectors.toList());
-        List<WellParameters> listParamsForCurrentWell;
-        LinkedHashMap<String, ArrayList<Double>> mapParamsForCurrentWell;
+        wellsList= wellsList.stream().filter(
+                a -> a.getId() >= startWell && a.getId() <= endWell).collect(Collectors.toList());
+        List<WellParameters> listParametersSelectedWells;
+        LinkedHashMap<String, ArrayList<Double>> mapParametersSelectedWells;
         TreeMap<String, LinkedHashMap<String, ArrayList<Double>>> mapWellsParams = new TreeMap<>();
         for (Wells well : wellsList) {
-            mapParamsForCurrentWell = new LinkedHashMap<>();
-            listParamsForCurrentWell = wellParametersList.stream().filter(x -> x.getWellId() == well.getId()).collect(Collectors.toList());
-            for (WellParameters parameter : listParamsForCurrentWell) {
-                mapParamsForCurrentWell.computeIfAbsent(parameter.getParameterName(), v -> new ArrayList<>()).add(parameter.getValue());
+            mapParametersSelectedWells = new LinkedHashMap<>();
+            listParametersSelectedWells = wellParametersList.stream().filter(
+                    a -> a.getWellId() == well.getId()).collect(Collectors.toList());
+            for (WellParameters parameter : listParametersSelectedWells) {
+                mapParametersSelectedWells.computeIfAbsent(
+                        parameter.getParameterName(), v -> new ArrayList<>()).add(parameter.getValue());
             }
-            mapWellsParams.put(well.getName(), mapParamsForCurrentWell);
+            mapWellsParams.put(well.getName(), mapParametersSelectedWells);
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append("\n");
+        for (Map.Entry<String, LinkedHashMap<String, ArrayList<Double>>> mapEntry : mapWellsParams.entrySet()) {
+            builder.append(mapEntry.getKey()).append("\n");
+            int k = 0;
+            for (Map.Entry<String, ArrayList<Double>> entry : mapEntry.getValue().entrySet()) {
+                Double min = null, max = null, ave = null;
+                for (Double doubles : entry.getValue()) {
+                    if (min == null) {
+                        min = max = ave = doubles;
+                    } else {
+                        min = Math.min(min, doubles);
+                        max = Math.max(max, doubles);
+                        ave += doubles;
+                    }
+                }
+                ave /= entry.getValue().size();
+                builder.append(String.format("%d. %s: min - %.2f; max - %.2f; ave - %.2f\n", ++k, entry.getKey(), min, max, ave));
+            }
+            builder.append("\n");
         }
         System.out.println("---------Task 2----------");
-        mapWellsParams.forEach((key, value) -> System.out.println(key + ": " + value));
-    }
+        System.out.println(builder);
 
+    }
+    //Задание 3
     @Override
     public void BoreholeToDeposit() {
         List<Departments> departmentsList = jsonReaderInterface.JsonReadDepartments();
         List<Wells> wellsList = jsonReaderInterface.JsonReadWells();
-
 
         Map<Departments, List<Wells>> mapDepartmentsAndWells = new LinkedHashMap<>();
         for (Departments department : departmentsList) {
@@ -71,7 +102,15 @@ public class MainAppCode implements MainAppCodeInterface {
                 }
             }
         }
+        StringBuilder builder = new StringBuilder();
+        for (Map.Entry<Departments, List<Wells>> entryMap : mapDepartmentsAndWells.entrySet()) {
+            builder.append(entryMap.getKey().getName()).append(":");
+                for (Wells well : entryMap.getValue()) {
+                    builder.append(" ").append(well.getName()).append(",");
+                }
+                builder.append("\n");
+        }
         System.out.println("---------Task 3----------");
-        mapDepartmentsAndWells.forEach((key, value) -> System.out.println(key + ": " + value));
+        System.out.println(builder);
     }
 }

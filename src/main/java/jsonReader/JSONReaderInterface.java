@@ -1,5 +1,8 @@
 package jsonReader;
-import jsonFiles.Departments;
+
+import jsonFilesClasses.Departments;
+import jsonFilesClasses.WellParameters;
+import jsonFilesClasses.Wells;
 
 import java.util.List;
 
