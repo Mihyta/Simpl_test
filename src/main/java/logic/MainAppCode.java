@@ -10,11 +10,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class MainAppCode implements MainAppCodeInterface {
+    public static String FILES_PATH = null;
     final JSONReaderInterface jsonReaderInterface = new JSONReader();
+    @Override
+    public String filesPath(String filesPath) {
+        FILES_PATH = filesPath;
+        return FILES_PATH;
+    }
+
     // Задание 1
     @Override
     public void uniqueParameters() {
-        List<WellParameters> wellParameters = jsonReaderInterface.JsonReadWellParameters();
+        List<WellParameters> wellParameters = jsonReaderInterface.jsonReadWellParameters();
         LinkedHashSet<WellParameters> wellParametersLinkedHashSet = new LinkedHashSet<>(wellParameters);
         int i = 0;
         StringBuilder builder = new StringBuilder();
@@ -27,8 +34,8 @@ public class MainAppCode implements MainAppCodeInterface {
     // Задание 2
     @Override
     public void nameBoreholeAndMinMaxAveParameters(int startWell, int endWell) {
-        List<WellParameters> wellParametersList = jsonReaderInterface.JsonReadWellParameters();
-        List<Wells> wellsList = jsonReaderInterface.JsonReadWells();
+        List<WellParameters> wellParametersList = jsonReaderInterface.jsonReadWellParameters();
+        List<Wells> wellsList = jsonReaderInterface.jsonReadWells();
         wellsList= wellsList.stream().filter(
                 a -> a.getId() >= startWell && a.getId() <= endWell).collect(Collectors.toList());
         List<WellParameters> listParametersSelectedWells;
@@ -71,9 +78,9 @@ public class MainAppCode implements MainAppCodeInterface {
     }
     //Задание 3
     @Override
-    public void BoreholeToDeposit() {
-        List<Departments> departmentsList = jsonReaderInterface.JsonReadDepartments();
-        List<Wells> wellsList = jsonReaderInterface.JsonReadWells();
+    public void boreholeToDeposit() {
+        List<Departments> departmentsList = jsonReaderInterface.jsonReadDepartments();
+        List<Wells> wellsList = jsonReaderInterface.jsonReadWells();
 
         Map<Departments, List<Wells>> mapDepartmentsAndWells = new LinkedHashMap<>();
         for (Departments department : departmentsList) {
@@ -113,4 +120,5 @@ public class MainAppCode implements MainAppCodeInterface {
         System.out.println("---------Task 3----------");
         System.out.println(builder);
     }
+
 }
